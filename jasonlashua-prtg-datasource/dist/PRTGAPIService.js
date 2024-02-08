@@ -384,10 +384,12 @@ System.register(["angular", "lodash", "./utils"], function (_export, _context) {
 
           return this.performPRTGAPIRequest(method, params).then(function (results) {
             for (var iter = 0; iter < results.length; iter++) {
+              // swap day & year:
+              const myFunc = (myArr)=>{return [myArr[4],myArr[3],myArr[2]].join("/")+" "+myArr[5];};
               history.push({
                 sensor: sensor,
                 channel: channel,
-                datetime: Date.parse(results[iter]["datetime"].match(/(\d+-\d+-\d+\s\d+:\d+:\d+)/)[1]), //Let's pray there are no Chinese timestamps
+                datetime: myFunc( Date.parse(results[iter]["datetime"].match(/((\d+)-(\d+)-(\d+)\s(\d+:\d+:\d+))/))),
                 value: results[iter][channel]
               });
             }

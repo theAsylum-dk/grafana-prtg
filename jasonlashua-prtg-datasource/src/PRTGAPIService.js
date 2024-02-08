@@ -508,10 +508,13 @@ function PRTGAPIService(alertSrv, backendSrv) {
       return this.performPRTGAPIRequest(method, params).then(results => {
         for (let iter = 0; iter < results.length; iter++)
         {
+            // swap day & year:
+            const myFunc = (myArr)=>{return [myArr[4],myArr[3],myArr[2]].join("/")+" "+myArr[5];};
             history.push({
             sensor: sensor,
             channel: channel,
-            datetime: Date.parse(results[iter]["datetime"].match(/(\d+-\d+-\d+\s\d+:\d+:\d+)/)[1]), //Let's pray there are no Chinese timestamps
+                console.info( myFunc(dtStr.match(/((\d+)-(\d+)-(\d+)\s(\d+:\d+:\d+))/)));
+            datetime: myFunc( Date.parse(results[iter]["datetime"].match(/((\d+)-(\d+)-(\d+)\s(\d+:\d+:\d+))/))),
             value: results[iter][channel] 
           });
         }
